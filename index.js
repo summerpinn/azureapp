@@ -11,28 +11,27 @@ app.get('/', (req, res) => {
 })
 
 app.get('/message', (req, res) => {
-    // console.log(`[Queue - Receiver] Truncating Queue`);
-    // var retMsg = ""; 
-    // queueService.getMessage(config.queueName, (err, results, res) => {
-    //     if (err) {
-    //         console.log(err);
-    //         retMsg = err; 
-    //         return;
-    //     }
+    console.log(`[Queue - Receiver] Truncating Queue`);
+    var retMsg = ""; 
+    queueService.getMessage(config.queueName, (err, results, res) => {
+        if (err) {
+            console.log(err);
+            retMsg = err; 
+            return;
+        }
 
-    //     if (!results[0]) {
-    //         console.log("Queue is empty...");
-    //         retMsg = "Queue is empty..."; 
-    //         return;
-    //     }
+        if (!results[0]) {
+            console.log("Queue is empty...");
+            retMsg = "Queue is empty..."; 
+            return;
+        }
 
-    //     results.foreach((result) => {
-    //         console.log("msg : " + result + "\n");
-    //         retMsg += "{" + result + "}"; 
-    //     });
-    // });
-    // res.send("msg :" + retMsg ); 
-    res.send("Message"); 
+        results.foreach((result) => {
+            console.log("msg : " + result + "\n");
+            retMsg += "{" + result + "}"; 
+        });
+    });
+    res.send("msg :" + retMsg ); 
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
