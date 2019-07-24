@@ -11,7 +11,7 @@ function readMessage() {
 
         var ret = ""; 
         
-        queueService.peekMessages(config.queueName, (err, results, res) => {
+        queueService.peekMessages(config.queueName, {numOfMessages:10}, (err, results, res) => {
             if(err){
                 resolve(err);
             }
