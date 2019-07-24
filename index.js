@@ -7,27 +7,32 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-    console.log(`[Queue - Receiver] Truncating Queue`);
-    var retMsg = ""; 
-    queueService.getMessage(config.queueName, (err, results, res) => {
-        if (err) {
-            console.log(err);
-            retMsg = err; 
-            return;
-        }
+    res.send("Hi"); 
+})
 
-        if (!results[0]) {
-            console.log("Queue is empty...");
-            retMsg = "Queue is empty..."; 
-            return;
-        }
+app.get('/message', (req, res) => {
+    // console.log(`[Queue - Receiver] Truncating Queue`);
+    // var retMsg = ""; 
+    // queueService.getMessage(config.queueName, (err, results, res) => {
+    //     if (err) {
+    //         console.log(err);
+    //         retMsg = err; 
+    //         return;
+    //     }
 
-        results.foreach((result) => {
-            console.log("msg : " + result + "\n");
-            retMsg += "{" + result + "}"; 
-        });
-    });
-    res.send("msg :" + retMsg ); 
+    //     if (!results[0]) {
+    //         console.log("Queue is empty...");
+    //         retMsg = "Queue is empty..."; 
+    //         return;
+    //     }
+
+    //     results.foreach((result) => {
+    //         console.log("msg : " + result + "\n");
+    //         retMsg += "{" + result + "}"; 
+    //     });
+    // });
+    // res.send("msg :" + retMsg ); 
+    res.send("Message"); 
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
