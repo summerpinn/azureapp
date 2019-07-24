@@ -17,8 +17,9 @@ function readMessage() {
             }
 
             results.forEach(element => {
-                ret += element; 
+                ret += element.messageText; 
             }); 
+
             resolve(ret); 
         }); 
     })
