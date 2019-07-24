@@ -2,16 +2,16 @@ var azure = require('azure-storage');
 const express = require('express');
 var config = require('./config');
 
-
 const app = express();
+const queueService = azure.createQueueService(config.azureStorageAccount, config.azureStorageAccessKey);
 const port=process.env.PORT || 3000; 
 
 function readMessage() { 
     return new Promise(function(resolve, reject){
 
         var ret = ""; 
-        const queueService = azure.createQueueService(config.azureStorageAccount, config.azureStorageAccessKey);
-        queueService.getMessage(config.queueName, (err, results, res) => {
+        
+        queueService.getMessages(config.queueName, (err, results, res) => {
             if(err){
                 resolve(err);
             }
