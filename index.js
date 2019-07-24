@@ -11,7 +11,7 @@ function readMessage() {
 
         var ret = ""; 
         
-        queueService.getMessages(config.queueName, (err, results, res) => {
+        queueService.peekMessages(config.queueName, (err, results, res) => {
             if(err){
                 resolve(err);
             }
@@ -33,7 +33,7 @@ app.get('/message', (req, res) => {
     
     readMessage().then( (message)=>{ 
         var ret = message;
-        res.send("msg : " +  JSON.stringify(ret) ); 
+        res.send("msg : " +  ret ); 
     }); 
     
 })
