@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 function readMessage() {
     return new Promise(function (resolve, reject) {
         queueService.getMessages(config.queueName, (err, messages, res) => {
-            
+
             if (err) {
                 reject(err);
                 return;
@@ -18,8 +18,7 @@ function readMessage() {
             var message = messages[0];
             queueService.deleteMessage(config.queueName, message.messageId, message.popReceipt,
                 (error) => {
-                    if (!error) {
-                        // Message deleted
+                    if (error) {
                     }
                 }
             );
