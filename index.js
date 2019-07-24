@@ -17,21 +17,25 @@ app.get('/message', (req, res) => {
         if (err) {
             console.log(err);
             retMsg = err; 
-            return;
-        }
-
-        if (!results[0]) {
+        }else if (!results[0]) {
             console.log("Queue is empty...");
             retMsg = "Queue is empty..."; 
-            return;
-        }
+        }else {
+            for( var i = 0; i<results.lenght; i++ ){
 
-        results.foreach((result) => {
-            console.log("msg : " + result + "\n");
-            retMsg += "{" + result + "}"; 
-        });
+            }
+        }
     });
     res.send("msg :" + retMsg ); 
+})
+
+app.get('/add', (req, res) => {
+    queueService.createMessage(config.queueName, "Hi from Node", function(error, results, response){
+        if(!error){
+          // Message inserted
+        }
+      }); 
+      res.send("message added." ); 
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
