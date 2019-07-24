@@ -16,7 +16,7 @@ function readMessage() {
                 resolve(err);
             }
 
-            results.forEach(element => {
+            results.forEach( function(element){
                 ret += element.messageText; 
             }); 
 
