@@ -32,7 +32,7 @@ app.get('/message', (req, res) => {
     
     readMessage().then( (message)=>{ 
         var ret = message;
-        res.send("msg : " + ret ); 
+        res.send("msg : " +  JSON.stringify(ret) ); 
     }); 
     
 })
