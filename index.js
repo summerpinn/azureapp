@@ -4,48 +4,40 @@ var config = require('./config');
 
 const app = express();
 const queueService = azure.createQueueService(config.azureStorageAccount, config.azureStorageAccessKey);
-const port=process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 
-function readMessage() { 
-    return new Promise(function(resolve, reject){
-
-        var ret = ""; 
-        
-        queueService.getMessages(config.queueName, {numOfMessages:10}, (err, results, res) => {
-            if(err){
-                resolve(err);
+function readMessage() {
+    return new Promise(function (resolve, reject) {
+        queueService.getMessages(config.queueName, (err, messages, res) => {
+            
+            if (err) {
+                reject(err);
+                return;
             }
 
-            results.forEach( function(element){
-                ret += element.messageText; 
-            }); 
+            var message = messages[0];
+            queueService.deleteMessage(config.queueName, message.messageId, message.popReceipt,
+                (error) => {
+                    if (!error) {
+                        // Message deleted
+                    }
+                }
+            );
 
-            resolve(ret); 
-        }); 
+            resolve(message.messageText);
+        });
     })
 }
 
 app.get('/', (req, res) => {
-    res.send("Hi"); 
+    res.send("Hello");
 })
 
-app.get('/message', (req, res) => {
-    
-    readMessage().then( (message)=>{ 
-        var ret = message;
-        res.send("msg : " +  ret ); 
-    }); 
-    
+app.get('/read', (req, res) => {
+    readMessage().then((message) => {
+        res.send("msg : " + message);
+    });
 })
 
-app.get('/add', (req, res) => {
-    queueService.createMessage(config.queueName, "Hi from Node", function(error, results, response){
-        if(!error){
-          // Message inserted
-        }
-      }); 
-      res.send("message added." ); 
-})
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Azure Node Application listening on port ${port}!`))
 
