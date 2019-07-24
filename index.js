@@ -1,32 +1,40 @@
 var azure = require('azure-storage');
 const express = require('express');
 var config = require('./config');
-const queueService = azure.createQueueService(config.azureStorageAccount, config.azureStorageAccessKey);
+
 
 const app = express();
 const port=process.env.PORT || 3000; 
+
+function readMessage() { 
+    return new Promise(function(resolve, reject){
+
+        var ret = ""; 
+        const queueService = azure.createQueueService(config.azureStorageAccount, config.azureStorageAccessKey);
+        queueService.getMessage(config.queueName, (err, results, res) => {
+            if(err){
+                resolve(err);
+            }
+
+            results.forEach(element => {
+                ret += element; 
+            }); 
+            resolve(ret); 
+        }); 
+    })
+}
 
 app.get('/', (req, res) => {
     res.send("Hi"); 
 })
 
 app.get('/message', (req, res) => {
-    console.log(`[Queue - Receiver] Truncating Queue`);
-    var retMsg = ""; 
-    queueService.getMessage(config.queueName, (err, results, res) => {
-        if (err) {
-            console.log(err);
-            retMsg = err; 
-        }else if (!results[0]) {
-            console.log("Queue is empty...");
-            retMsg = "Queue is empty..."; 
-        }else {
-            for( var i = 0; i<results.lenght; i++ ){
-
-            }
-        }
-    });
-    res.send("msg :" + retMsg ); 
+    
+    readMessage().then( (message)=>{ 
+        var ret = message;
+        res.send("msg : " + ret ); 
+    }); 
+    
 })
 
 app.get('/add', (req, res) => {
