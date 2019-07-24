@@ -16,6 +16,12 @@ function readMessage() {
             }
 
             var message = messages[0];
+
+            if (!message) {
+                resolve('Message queue is empty');
+                return;
+            }
+
             queueService.deleteMessage(config.queueName, message.messageId, message.popReceipt,
                 (error) => {
                     if (error) {
